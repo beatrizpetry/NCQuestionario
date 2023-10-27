@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: hsla(42, 70%, 56%, 0.849)
+}
+
+.cabecalho {
+    background-color: rgb(10, 151, 97);
+    color: #fff;
+    padding: 0px;
+    text-align: center;
+}
+
+.perguntas {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+.nok {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+.ok {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+.descricao {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+.responsavel {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+.classificacao {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    align-items: center;
+    padding: 40px;
+}
+
+input {
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    font-size: 12pt;
+    outline: none;
+    box-sizing: border-box;
+    padding: 5px
+}
+
+select {
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    font-size: 12pt;
+    outline: none;
+    box-sizing: border-box;
+    padding: 5px
+}
