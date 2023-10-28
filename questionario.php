@@ -8,54 +8,75 @@
 </head>
 <body>
     <?php
-    include_once('bd/conexao.php');
-    
+    global $servername;
+    global $username;
+    global $password;
+    global $database;
+
+    $servername = "localhost";
+    $username = "questionario";
+    $password = "123";
+    $database = "questionariofinal";
+
+    $connectbd = mysqli_connect($servername, $username, $password, $database);
+    if (!$connectbd) {
+        die('Erro de conexão: ' . mysqli_connect_error());
+    }
+
+    // Consulta SQL para obter as perguntas
+    $sql = "SELECT * FROM Questionário";
+    $result = mysqli_query($connectbd, $sql);
+
+    if (!$result) {
+        die("Erro na consulta: " . mysqli_error($connectbd));
+    }
     ?>
+
     <div class="cabecalho">
         <h1>Questionário de Medição</h1>
     </div>
-    <div class="main">
-        <div class="perguntas">
-            <h3>Perguntas</h3>
-            <ul >
-                <?php 
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<li>";
-                        echo "<td>" . $row["Pergunta"] . "</td";
-                        echo "</li>";
+    <form method="post" action="processar_respostas.php">
+        <div class="main">
+            <div class="perguntas">
+                <h3>Perguntas</h3>
+                <ul>
+                    <?php
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<li class='pergunta'>";
+                            echo "<span class='pergunta-text'>" . $row["Pergunta"] . "</span>";
+                            echo "<div class='resposta'>";
+                            echo "<div class='ok-nok'>";
+                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='OK'> OK";
+                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='NOK'> NOK";
+                            echo "</div>";
+                            echo "<div class='descricao'>";
+                            echo "<label for='descricao'>Descrição</label>";
+                            echo "<input type='text' name='descricao[" . $row['Pergunta'] . "]' id='descricao'>";
+                            echo "</div>";
+                            echo "<div class='responsavel'>";
+                            echo "<label for='responsavel'>Responsável</label>";
+                            echo "<input type='text' name='responsavel[" . $row['Pergunta'] . "]' id='responsavel'>";
+                            echo "</div>";
+                            echo "<div class='classificacao'>";
+                            echo "<label for='classificacao'>Classificação</label>";
+                            echo "<select name='classificacao[" . $row['Pergunta'] . "]'>";
+                            echo "<option value='Alto'>Alto</option>";
+                            echo "<option value='Médio'>Médio</option>";
+                            echo "<option value='Baixo'>Baixo</option>";
+                            echo "</select>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "</li>";
                         }
-                        
-                    }?> 
-                </ul> 
+                    }
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
+    </form>
 
-        </div>
-        <div class="ok">
-            <h3>OK</h3>
-            <input type="radio" name="opcao" id="ok">
-        </div>
-        <div class="nok">
-            <h3>NOK</h3>
-            <input type="radio" name="opcao" id="nok">
-        </div>
-        <div class="descricao" id="inputOculto" style="display: none;">
-            <h3>Descrição</h3>
-            <input type="text" name="descricao" id="descricao">
-        </div>
-        <div class="responsavel" id="inputOculto2" style="display: none;">
-            <h3>Responsável</h3>
-            <input type="text" name="responsavel" id="responsavel">
-        </div>
-        <div class="classificacao">
-            <h3>Classificação</h3>
-            <select name="classificacao">
-                <option value="alt"> Alto </option>
-                <option value="med"> Médio </option>
-                <option value="bai"> Baixo </option>
-            </select>
-        </div>
-        </div>
-    </div>
     <script src="script/questionario.js"></script>
 </body>
 </html>

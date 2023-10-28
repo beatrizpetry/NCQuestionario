@@ -1,81 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-body{
+body {
     font-family: 'Poppins', sans-serif;
-    background-color: hsla(42, 70%, 56%, 0.849)
+    background-color: #fff;
 }
 
 .cabecalho {
     background-color: rgb(10, 151, 97);
     color: #fff;
-    padding: 0px;
     text-align: center;
+    padding: 2px;
+    margin: 0;
+    height: 10%;
 }
+
 
 .perguntas {
+    margin: 0;
+    padding: 20px;
+}
+
+.perguntas ul {
+    list-style: none;
+    padding: 0;
+}
+
+.perguntas li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.pergunta-text {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.ok-nok {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Espaçamento entre OK/NOK e Descrição */
+}
+
+.ok input[type="radio"], .nok input[type="radio"] {
+    margin-right: 5px; /* Espaçamento entre o radio e o rótulo OK/NOK */
+}
+
+/* Restante do estilo para os campos */
+.descricao, .responsavel, .classificacao {
     display: inline-block;
     vertical-align: top;
     margin: 0;
-    align-items: center;
-    padding: 40px;
+    padding: 20px;
 }
 
-.nok {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    align-items: center;
-    padding: 40px;
-}
-
-.ok {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    align-items: center;
-    padding: 40px;
-}
-
-.descricao {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    align-items: center;
-    padding: 40px;
-}
-
-.responsavel {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    align-items: center;
-    padding: 40px;
-}
-
-.classificacao {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    align-items: center;
-    padding: 40px;
-}
-
-input {
+input, select {
     border: none;
     border-radius: 5px;
     background: #f0f0f0;
     font-size: 12pt;
     outline: none;
     box-sizing: border-box;
-    padding: 5px
+    padding: 5px;
+    width: 100%;
 }
 
-select {
+
+input[type="submit"] {
+    background-color: rgb(10, 151, 97);
+    color: #fff;
+    padding: 10px 20px; 
     border: none;
     border-radius: 5px;
-    background: #f0f0f0;
-    font-size: 12pt;
-    outline: none;
-    box-sizing: border-box;
-    padding: 5px
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto; 
+    width: 15%;
 }
+
+.ok-nok label,
+.descricao label,
+.responsavel label,
+.classificacao label {
+    font-weight: bold;
+}
+
