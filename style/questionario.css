@@ -14,12 +14,6 @@ body {
     height: 10%;
 }
 
-
-.perguntas {
-    margin: 0;
-    padding: 20px;
-}
-
 .perguntas ul {
     list-style: none;
     padding: 0;
@@ -87,3 +81,9 @@ input[type="submit"] {
     font-weight: bold;
 }
 
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
