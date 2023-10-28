@@ -30,3 +30,7 @@ INSERT INTO Questionário (Pergunta) VALUES
     ('20. As métricas e indicadores de desempenho são ajustados quando necessário para refletir mudanças no projeto ou nas metas do projeto?'),
     ('21. As ações de melhoria no projeto são priorizadas com base nas informações de medição?'),
     ('22. São feitas avaliações externas, como revisões por pares ou auditorias independentes, para verificar a precisão das medições?');
+
+ALTER TABLE Questionário
+ADD Data_inicio DATE NULL,
+ADD Data_fim DATE NULL;
