@@ -7,20 +7,28 @@
     <title>Questionário de Medição</title>
 </head>
 <body>
+    <?php
+    include_once('bd/conexao.php');
+    
+    ?>
     <div class="cabecalho">
         <h1>Questionário de Medição</h1>
     </div>
     <div class="main">
         <div class="perguntas">
             <h3>Perguntas</h3>
-            <ol>
-                <li>Pergunta</li>
-                <li>Pergunta</li>
-                <li>Pergunta</li>
-                <li>Pergunta</li>
-                <li>Pergunta</li>
-                <li>Pergunta</li>
-            </ol>
+            <ul >
+                <?php 
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<li>";
+                        echo "<td>" . $row["Pergunta"] . "</td";
+                        echo "</li>";
+                        }
+                        
+                    }?> 
+                </ul> 
+
         </div>
         <div class="ok">
             <h3>OK</h3>
