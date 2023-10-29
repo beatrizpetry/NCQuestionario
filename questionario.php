@@ -82,7 +82,7 @@
                 </ul>
             </div>
         </div>
-        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
+        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;" formaction="nconformidades.php">
     </form>
 
     <script>
