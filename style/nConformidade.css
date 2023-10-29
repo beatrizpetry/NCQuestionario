@@ -3,41 +3,30 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #fff;
+    margin: 0;
 }
 
 .cabecalho {
     background-color: rgb(10, 151, 97);
     color: #fff;
     text-align: center;
-    padding: 2px;
+    padding: 10px;
     margin: 0;
     height: 10%;
+    border: 10px solid white; 
 }
-
-.ncs ul {
-    list-style: none;
-    padding: 0;
-}
-
-.ncs li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
 
 
 input[type="submit"] {
     background-color: rgb(10, 151, 97);
     color: #fff;
-    padding: 10px 20px; 
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     display: block;
-    margin: 0 auto; 
+    margin: 20px auto; 
     width: 15%;
 }
 
@@ -50,40 +39,33 @@ input, select {
     box-sizing: border-box;
     padding: 5px;
     width: 100%;
+    margin-bottom: 10px;
 }
 
-.descricao, .responsavel, .classificacao, .data-inicio, .data-fim, .resolvido {
+.data-inicio, .data-fim, .resolvido, .descricao, .responsavel, .classificacao {
     display: inline-block;
     vertical-align: top;
     margin: 0;
     padding: 20px;
 }
 
-.nc {
-    flex: 1;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
-    clear: both;
-}
-
-.descricao label,
-.responsavel label,
-.classificacao label,
-.data-inicio label,
-.data-fim label,
-.resolvido label,
-.nc label {
+.descricao label, .responsavel label, .classificacao label, .data-inicio label, .data-fim label, .resolvido label, .acao-corretiva label, .escalonamento label { 
     font-weight: bold;
+    padding: 20px;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center; 
+}
+
+.nc label {
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .main {
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }

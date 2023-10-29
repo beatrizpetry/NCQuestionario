@@ -19,13 +19,32 @@ if (!$connectbd) {
     die('Erro de conexão: ' . mysqli_connect_error());
 }
 
-$result = mysqli_query($connectbd, "SELECT * FROM Questionário");
+$result = mysqli_query($connectbd, "SELECT * FROM Questionário WHERE Situação = 'NOK'");
 
+if (isset($_POST['submit'])) {
+    foreach ($_POST['acao-corretiva'] as $pergunta => $acaoCorretiva) {
+        $dataInicio = mysqli_real_escape_string($connectbd, $_POST['data-inicio'][$pergunta]);
+        $dataFim = mysqli_real_escape_string($connectbd, $_POST['data-fim'][$pergunta]);
+        $escalonamento = mysqli_real_escape_string($connectbd, $_POST['escalonamento'][$pergunta]);
+        $acaoCorretiva = mysqli_real_escape_string($connectbd, $acaoCorretiva);
+        $resolvido = mysqli_real_escape_string($connectbd, $_POST['resolvido'][$pergunta]);
+
+
+        $updatesql = "UPDATE Questionário SET AçãoCorretiva = '$acaoCorretiva', Data_inicio = '$dataInicio', Data_fim = '$dataFim', Escalonamento = '$escalonamento', Resolvido_nc = '$resolvido' WHERE Pergunta = '$pergunta'";
+
+        // Verifique se a consulta SQL não está vazia
+        if (!empty($updatesql)) {
+            if (mysqli_query($connectbd, $updatesql)) {
+                $successMessage = "Dados atualizados com sucesso!";
+            } else {
+                $errorMessage = "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
+            }
+        }
+    }
+}
 ?>
 
-
 <body>
-
     <div class="cabecalho">
         <h1>Não Conformidades</h1>
     </div>
@@ -57,6 +76,11 @@ $result = mysqli_query($connectbd, "SELECT * FROM Questionário");
                             echo "<p>" . $row['Classificação_nc'] . "</p>";
                             echo "</div>";
 
+                            echo "<div class='acao-corretiva'>";
+                            echo "<label class='acao-corretiva' for='acao-corretiva-" . $row['Pergunta'] . "'>Ação Corretiva</label>";
+                            echo "<input type='text' name='acao-corretiva[" . $row['Pergunta'] . "]' id='acao-corretiva-" . $row['Pergunta'] . "'>";
+                            echo "</div>";
+
                             echo "<div class='data-inicio'>";
                             echo "<label for='data-inicio-" . $row['Pergunta'] . "'>Data Início</label>";
                             echo "<input type='date' name='data-inicio[" . $row['Pergunta'] . "]' id='data-inicio-" . $row['Pergunta'] . "'>";
@@ -70,22 +94,35 @@ $result = mysqli_query($connectbd, "SELECT * FROM Questionário");
                             echo "<div class='resolvido'>";
                             echo "<label for='resolvido-" . $row['Pergunta'] . "'>Resolvido</label>";
                             echo "<select name='resolvido[" . $row['Pergunta'] . "]' id='resolvido-" . $row['Pergunta'] . "'>";
+                            echo "<option value='Não' selected>Não</option>";
                             echo "<option value='Sim'>Sim</option>";
-                            echo "<option value='Não'>Não</option>";
                             echo "</select>";
                             echo "</div>";
 
-                            $nc++; 
+                            echo "<div class='escalonamento'>";
+                            echo "<label class='escalonamento' for='escalonamento-" . $row['Pergunta'] . "'>Escalonamento</label>";
+                            echo "<input type='text' name='escalonamento[" . $row['Pergunta'] . "]' id='escalonamento-" . $row['Pergunta'] . "'>";
+                            echo "</div>";
+
+                            $nc++;
                         }
                     }
                     ?>
                 </ul>
             </div>
         </div>
-        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
+        <input type="submit" name="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
     </form>
+    <script>
+        <?php
+        if (isset($successMessage)) {
+            echo "alert('$successMessage');";
+        }
 
+        if (isset($errorMessage)) {
+            echo "alert('$errorMessage');";
+        }
+        ?>
+    </script>
 </body>
-
 </html>
-

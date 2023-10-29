@@ -69,9 +69,9 @@
                             echo "<label for='classificacao-".$row['Pergunta']."'>Classificação</label>";
                             echo "<select name='classificacao[" . $row['Pergunta'] . "]' id='classificacao-".$row['Pergunta']."'>
                                       <option value='Não Aplicável'>Não Aplicável</option>
-                                      <option value='Alto'>Alto</option>
-                                      <option value='Médio'>Médio</option>
-                                      <option value='Baixo'>Baixo</option>
+                                      <option value='Alto'>Alto - 5 dias</option>
+                                      <option value='Médio'>Médio - 3 dias</option>
+                                      <option value='Baixo'>Baixo - 1 dia</option>
                                   </select>";
                             echo "</div>";
                             echo "</div>";
@@ -86,7 +86,6 @@
     </form>
 
     <script>
-        // Adicione um evento de mudança aos botões "OK" e "NOK"
         const okButtons = document.querySelectorAll('input[type="radio"][value="OK"]');
         const descricaoInputs = document.querySelectorAll('input[name^="descricao"]');
         const responsavelInputs = document.querySelectorAll('input[name^="responsavel"]');

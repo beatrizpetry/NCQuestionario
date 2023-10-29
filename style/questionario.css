@@ -3,50 +3,34 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #fff;
+    margin: 0;
 }
 
 .cabecalho {
     background-color: rgb(10, 151, 97);
     color: #fff;
     text-align: center;
-    padding: 2px;
+    padding: 10px;
     margin: 0;
     height: 10%;
-}
-
-.perguntas ul {
-    list-style: none;
-    padding: 0;
-}
-
-.perguntas li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.pergunta-text {
-    flex: 1;
-    margin-right: 10px;
 }
 
 
 .ok-nok {
     display: flex;
     align-items: center;
-    margin-right: 10px; 
+    margin-right: 2px; 
 }
 
 
 .ok-nok label {
     display: inline-flex;
     align-items: center;
-    margin-right: 5px; 
+    margin-right: 2px; 
 }
 
 .ok-nok input[type="radio"] {
-    margin-right: 5px; 
+    margin-right: 2px; 
 }
 
 
