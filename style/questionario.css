@@ -15,6 +15,28 @@ body {
     height: 10%;
 }
 
+.perguntas ul {
+    list-style: none;
+    padding: 10px;
+}
+
+.perguntas li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.pergunta-text {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    margin-left: 10px;
+}
+
+h3{
+    padding: 10px;
+}
 
 .ok-nok {
     display: flex;
@@ -57,13 +79,13 @@ input, select {
 input[type="submit"] {
     background-color: rgb(10, 151, 97);
     color: #fff;
-    padding: 10px 20px; 
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     display: block;
-    margin: 0 auto; 
+    margin: 20px auto; 
     width: 15%;
 }
 
