@@ -41,13 +41,39 @@ if (isset($_POST['submit'])) {
             }
         }
     }
+    // Consulta SQL para contar o número total de perguntas
+    $totalPerguntas = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Questionário");
+    $totalPerguntas = mysqli_fetch_assoc($totalPerguntas)["total"];
+
+    // Consulta SQL para contar o número de perguntas marcadas como "NOK"
+    $perguntasNOK = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Questionário WHERE Situação = 'NOK'");
+    $perguntasNOK = mysqli_fetch_assoc($perguntasNOK)["total"];
+
+    var_dump($totalPerguntas);
+    var_dump($perguntasNOK);
+
+    // Cálculo da taxa de aderência
+    $taxaAderencia = (($totalPerguntas - $perguntasNOK) / $totalPerguntas) * 100;
+
+    // Arredonde a taxa de aderência para duas casas decimais
+    $taxaAderencia = number_format($taxaAderencia, 2);
 }
 ?>
 
 <body>
-    <div class="cabecalho">
-        <h1>Não Conformidades</h1>
-    </div>
+<?php
+    if (isset($taxaAderencia)) {
+        echo "<div class='cabecalho'>";
+        echo "<h1>Não Conformidades</h1>";
+        echo "<p>Taxa de Aderência: $taxaAderencia%</p>";
+        echo "</div>";
+    } else {
+        echo "<div class='cabecalho'>";
+        echo "<h1>Não Conformidades</h1>";
+        echo "<p>Taxa de Aderência não disponível</p>";
+        echo "</div>";
+    }
+    ?>
     <form method="post" action="nconformidades.php">
         <div class="main">
             <div class="ncs">
