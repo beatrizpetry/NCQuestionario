@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+}
+
+.cabecalho {
+    background-color: rgb(10, 151, 97);
+    color: #fff;
+    text-align: center;
+    padding: 2px;
+    margin: 0;
+    height: 10%;
+}
+
+.ncs ul {
+    list-style: none;
+    padding: 0;
+}
+
+.ncs li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+
+
+input[type="submit"] {
+    background-color: rgb(10, 151, 97);
+    color: #fff;
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto; 
+    width: 15%;
+}
+
+input, select {
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    font-size: 12pt;
+    outline: none;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 100%;
+}
+
+.descricao, .responsavel, .classificacao, .data-inicio, .data-fim, .resolvido {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    padding: 20px;
+}
+
+.nc {
+    flex: 1;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    clear: both;
+}
+
+.descricao label,
+.responsavel label,
+.classificacao label,
+.data-inicio label,
+.data-fim label,
+.resolvido label,
+.nc label {
+    font-weight: bold;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
