@@ -31,17 +31,26 @@ body {
     margin-right: 10px;
 }
 
+
 .ok-nok {
     display: flex;
     align-items: center;
-    margin-right: 10px; /* Espaçamento entre OK/NOK e Descrição */
+    margin-right: 10px; 
 }
 
-.ok input[type="radio"], .nok input[type="radio"] {
-    margin-right: 5px; /* Espaçamento entre o radio e o rótulo OK/NOK */
+
+.ok-nok label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 5px; 
 }
 
-/* Restante do estilo para os campos */
+.ok-nok input[type="radio"] {
+    margin-right: 5px; 
+}
+
+
+
 .descricao, .responsavel, .classificacao {
     display: inline-block;
     vertical-align: top;
@@ -74,7 +83,6 @@ input[type="submit"] {
     width: 15%;
 }
 
-.ok-nok label,
 .descricao label,
 .responsavel label,
 .classificacao label {

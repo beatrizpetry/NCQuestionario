@@ -8,11 +8,6 @@
 </head>
 <body>
     <?php
-    global $servername;
-    global $username;
-    global $password;
-    global $database;
-
     $servername = "localhost";
     $username = "questionario";
     $password = "123";
@@ -23,19 +18,29 @@
         die('Erro de conexão: ' . mysqli_connect_error());
     }
 
-    // Consulta SQL para obter as perguntas
-    $sql = "SELECT * FROM Questionário";
-    $result = mysqli_query($connectbd, $sql);
+    $result = mysqli_query($connectbd, "SELECT * FROM Questionário");
 
-    if (!$result) {
-        die("Erro na consulta: " . mysqli_error($connectbd));
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        foreach ($_POST["resposta"] as $pergunta => $resposta) {
+            $descricao = mysqli_real_escape_string($connectbd, $_POST["descricao"][$pergunta]);
+            $responsavel = mysqli_real_escape_string($connectbd, $_POST["responsavel"][$pergunta]);
+            $classificacao = $_POST["classificacao"][$pergunta];
+
+            $updateSql = "UPDATE Questionário SET Situação = '$resposta', Descrição_nc = '$descricao', Responsável_nc = '$responsavel', Classificação_nc = '$classificacao' WHERE Pergunta = '$pergunta'";
+
+            if (mysqli_query($connectbd, $updateSql)) {
+                $successMessage = "Dados atualizados com sucesso!";
+            } else {
+                $errorMessage = "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
+            }
+        }
     }
     ?>
 
     <div class="cabecalho">
         <h1>Questionário de Medição</h1>
     </div>
-    <form method="post" action="processar_respostas.php">
+    <form method="post" action="questionario.php">
         <div class="main">
             <div class="perguntas">
                 <h3>Perguntas</h3>
@@ -47,24 +52,27 @@
                             echo "<span class='pergunta-text'>" . $row["Pergunta"] . "</span>";
                             echo "<div class='resposta'>";
                             echo "<div class='ok-nok'>";
-                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='OK'> OK";
-                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='NOK'> NOK";
+                            echo "<label for='ok-".$row['Pergunta']."'><b>OK</b></label>";
+                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='OK' id='ok-".$row['Pergunta']."'>";
+                            echo "<label for='nok-".$row['Pergunta']."'><b>NOK</b></label>";
+                            echo "<input type='radio' name='resposta[" . $row['Pergunta'] . "]' value='NOK' id='nok-".$row['Pergunta']."'>";
                             echo "</div>";
                             echo "<div class='descricao'>";
-                            echo "<label for='descricao'>Descrição</label>";
-                            echo "<input type='text' name='descricao[" . $row['Pergunta'] . "]' id='descricao'>";
+                            echo "<label for='descricao-".$row['Pergunta']."'>Descrição</label>";
+                            echo "<input type='text' name='descricao[" . $row['Pergunta'] . "]' id='descricao-".$row['Pergunta']."'>";
                             echo "</div>";
                             echo "<div class='responsavel'>";
-                            echo "<label for='responsavel'>Responsável</label>";
-                            echo "<input type='text' name='responsavel[" . $row['Pergunta'] . "]' id='responsavel'>";
+                            echo "<label for='responsavel-".$row['Pergunta']."'>Responsável</label>";
+                            echo "<input type='text' name='responsavel[" . $row['Pergunta'] . "]' id='responsavel-".$row['Pergunta']."'>";
                             echo "</div>";
                             echo "<div class='classificacao'>";
-                            echo "<label for='classificacao'>Classificação</label>";
-                            echo "<select name='classificacao[" . $row['Pergunta'] . "]'>";
-                            echo "<option value='Alto'>Alto</option>";
-                            echo "<option value='Médio'>Médio</option>";
-                            echo "<option value='Baixo'>Baixo</option>";
-                            echo "</select>";
+                            echo "<label for='classificacao-".$row['Pergunta']."'>Classificação</label>";
+                            echo "<select name='classificacao[" . $row['Pergunta'] . "]' id='classificacao-".$row['Pergunta']."'>
+                                      <option value='Não Aplicável'>Não Aplicável</option>
+                                      <option value='Alto'>Alto</option>
+                                      <option value='Médio'>Médio</option>
+                                      <option value='Baixo'>Baixo</option>
+                                  </select>";
                             echo "</div>";
                             echo "</div>";
                             echo "</li>";
@@ -77,6 +85,42 @@
         <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
     </form>
 
-    <script src="script/questionario.js"></script>
+    <script>
+        // Adicione um evento de mudança aos botões "OK" e "NOK"
+        const okButtons = document.querySelectorAll('input[type="radio"][value="OK"]');
+        const descricaoInputs = document.querySelectorAll('input[name^="descricao"]');
+        const responsavelInputs = document.querySelectorAll('input[name^="responsavel"]');
+        const classificacaoSelects = document.querySelectorAll('select[name^="classificacao"]');
+
+        okButtons.forEach((okButton, index) => {
+            okButton.addEventListener("change", function () {
+                if (okButton.checked) {
+                    descricaoInputs[index].value = "Não Aplicável";
+                    responsavelInputs[index].value = "Não Aplicável";
+                    classificacaoSelects[index].value = "Não Aplicável";
+                }
+            });
+        });
+
+        const nokButtons = document.querySelectorAll('input[type="radio"][value="NOK"]');
+        nokButtons.forEach((nokButton, index) => {
+            nokButton.addEventListener("change", function () {
+                if (nokButton.checked) {
+                    descricaoInputs[index].value = "";
+                    responsavelInputs[index].value = "";
+                }
+            });
+        });
+
+        <?php
+        if (isset($successMessage)) {
+            echo "alert('$successMessage');";
+        }
+
+        if (isset($errorMessage)) {
+            echo "alert('$errorMessage');";
+        }
+        ?>
+    </script>
 </body>
 </html>
