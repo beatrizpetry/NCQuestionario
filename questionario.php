@@ -7,40 +7,44 @@
     <title>Questionário de Medição</title>
 </head>
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "questionario";
-    $password = "123";
-    $database = "questionariofinal";
+<?php
+$servername = "localhost";
+$username = "questionario";
+$password = "123";
+$database = "questionariofinal";
 
-    $connectbd = mysqli_connect($servername, $username, $password, $database);
-    if (!$connectbd) {
-        die('Erro de conexão: ' . mysqli_connect_error());
-    }
+$connectbd = mysqli_connect($servername, $username, $password, $database);
+if (!$connectbd) {
+    die('Erro de conexão: ' . mysqli_connect_error());
+}
 
-    $result = mysqli_query($connectbd, "SELECT * FROM Questionário");
+$result = mysqli_query($connectbd, "SELECT * FROM Questionário");
 
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        foreach ($_POST["resposta"] as $pergunta => $resposta) {
-            $descricao = mysqli_real_escape_string($connectbd, $_POST["descricao"][$pergunta]);
-            $responsavel = mysqli_real_escape_string($connectbd, $_POST["responsavel"][$pergunta]);
-            $classificacao = $_POST["classificacao"][$pergunta];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    foreach ($_POST["resposta"] as $pergunta => $resposta) {
+        $descricao = mysqli_real_escape_string($connectbd, $_POST["descricao"][$pergunta]);
+        $responsavel = mysqli_real_escape_string($connectbd, $_POST["responsavel"][$pergunta]);
+        $classificacao = $_POST["classificacao"][$pergunta];
 
-            $updateSql = "UPDATE Questionário SET Situação = '$resposta', Descrição_nc = '$descricao', Responsável_nc = '$responsavel', Classificação_nc = '$classificacao' WHERE Pergunta = '$pergunta'";
+        $updateSql = "UPDATE Questionário SET Situação = '$resposta', Descrição_nc = '$descricao', Responsável_nc = '$responsavel', Classificação_nc = '$classificacao' WHERE Pergunta = '$pergunta'";
 
-            if (mysqli_query($connectbd, $updateSql)) {
-                $successMessage = "Dados atualizados com sucesso!";
-            } else {
-                $errorMessage = "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
-            }
+        if (mysqli_query($connectbd, $updateSql)) {
+            $successMessage = "Dados atualizados com sucesso!";
+        } else {
+            $errorMessage = "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
         }
     }
-    ?>
+    
+    // Redirecionar o usuário para nconformidades.php após o envio do formulário
+    header('Location: nconformidades.php');
+    exit;
+}
+?>
 
     <div class="cabecalho">
         <h1>Questionário de Medição</h1>
     </div>
-    <form method="post" action="questionario.php">
+    <form method="post" action="questionario.php" id="respostas-form">
         <div class="main">
             <div class="perguntas">
                 <h3>Perguntas</h3>
@@ -69,9 +73,9 @@
                             echo "<label for='classificacao-".$row['Pergunta']."'>Classificação</label>";
                             echo "<select name='classificacao[" . $row['Pergunta'] . "]' id='classificacao-".$row['Pergunta']."'>
                                       <option value='Não Aplicável'>Não Aplicável</option>
-                                      <option value='Alto'>Alto - 5 dias</option>
-                                      <option value='Médio'>Médio - 3 dias</option>
-                                      <option value='Baixo'>Baixo - 1 dia</option>
+                                      <option value='Alta - 5 dias'>Alta - 5 dias</option>
+                                      <option value='Média - 3 dias'>Média - 3 dias</option>
+                                      <option value='Baixa - 1 dia'>Baixa - 1 dia</option>
                                   </select>";
                             echo "</div>";
                             echo "</div>";
@@ -82,9 +86,8 @@
                 </ul>
             </div>
         </div>
-        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;" formaction="nconformidades.php">
+        <input type="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
     </form>
-
     <script>
         const okButtons = document.querySelectorAll('input[type="radio"][value="OK"]');
         const descricaoInputs = document.querySelectorAll('input[name^="descricao"]');

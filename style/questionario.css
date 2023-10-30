@@ -86,7 +86,7 @@ input[type="submit"] {
     cursor: pointer;
     display: block;
     margin: 20px auto; 
-    width: 15%;
+    width: 40%;
 }
 
 .descricao label,

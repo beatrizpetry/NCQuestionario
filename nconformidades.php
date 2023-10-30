@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -29,43 +29,48 @@ if (isset($_POST['submit'])) {
         $acaoCorretiva = mysqli_real_escape_string($connectbd, $acaoCorretiva);
         $resolvido = mysqli_real_escape_string($connectbd, $_POST['resolvido'][$pergunta]);
 
-
-        $updatesql = "UPDATE Questionário SET AçãoCorretiva = '$acaoCorretiva', Data_inicio = '$dataInicio', Data_fim = '$dataFim', Escalonamento = '$escalonamento', Resolvido_nc = '$resolvido' WHERE Pergunta = '$pergunta'";
+        // Verifique se o campo Resolvido é "Sim" e atualize o campo Solução para "OK"
+        if ($resolvido === 'Sim') {
+            // Atualize o campo Solução para "OK" na tabela Questionário
+            $updatesql = "UPDATE Questionário SET AçãoCorretiva = '$acaoCorretiva', Data_inicio = '$dataInicio', Data_fim = '$dataFim', Escalonamento = '$escalonamento', Resolvido_nc = '$resolvido', Situação = 'OK' WHERE Pergunta = '$pergunta'";
+        } else {
+            // Caso contrário, atualize sem alterar o campo Solução
+            $updatesql = "UPDATE Questionário SET AçãoCorretiva = '$acaoCorretiva', Data_inicio = '$dataFim', Data_fim = '$dataFim', Escalonamento = '$escalonamento', Resolvido_nc = '$resolvido' WHERE Pergunta = '$pergunta'";
+        }
 
         // Verifique se a consulta SQL não está vazia
         if (!empty($updatesql)) {
             if (mysqli_query($connectbd, $updatesql)) {
-                $successMessage = "Dados atualizados com sucesso!";
+
             } else {
-                $errorMessage = "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
+                echo "Erro de atualização das Perguntas: " . mysqli_error($connectbd);
             }
         }
     }
-    // Consulta SQL para contar o número total de perguntas
-    $totalPerguntas = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Questionário");
-    $totalPerguntas = mysqli_fetch_assoc($totalPerguntas)["total"];
-
-    // Consulta SQL para contar o número de perguntas marcadas como "NOK"
-    $perguntasNOK = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Questionário WHERE Situação = 'NOK'");
-    $perguntasNOK = mysqli_fetch_assoc($perguntasNOK)["total"];
-
-    var_dump($totalPerguntas);
-    var_dump($perguntasNOK);
-
-    // Cálculo da taxa de aderência
-    $taxaAderencia = (($totalPerguntas - $perguntasNOK) / $totalPerguntas) * 100;
-
-    // Arredonde a taxa de aderência para duas casas decimais
-    $taxaAderencia = number_format($taxaAderencia, 2);
 }
+
+// Consulta SQL para contar o total de perguntas na tabela Questionário
+$totalPerguntasQuery = mysqli_query($connectbd, "SELECT COUNT(*) AS total FROM Questionário");
+$totalPerguntasAssoc = mysqli_fetch_assoc($totalPerguntasQuery);
+$totalPerguntas = $totalPerguntasAssoc["total"];
+
+// Consulta SQL para contar o número de perguntas marcadas como "NOK"
+$perguntasNOKQuery = mysqli_query($connectbd, "SELECT COUNT(*) AS total FROM Questionário WHERE Situação = 'NOK'");
+$perguntasNOKAssoc = mysqli_fetch_assoc($perguntasNOKQuery);
+$perguntasNOK = $perguntasNOKAssoc["total"];
+
+// Cálculo da taxa de aderência
+$taxaAderencia = (($totalPerguntas - $perguntasNOK) / $totalPerguntas) * 100;
+
+// Arredonde a taxa de aderência para duas casas decimais
+$taxaAderencia = number_format($taxaAderencia, 2);
 ?>
 
 <body>
-<?php
+    <?php
     if (isset($taxaAderencia)) {
         echo "<div class='cabecalho'>";
-        echo "<h1>Não Conformidades</h1>";
-        echo "<p>Taxa de Aderência: $taxaAderencia%</p>";
+        echo "<h1>Não Conformidades - Taxa de Aderência: $taxaAderencia%</h1>";
         echo "</div>";
     } else {
         echo "<div class='cabecalho'>";
@@ -104,51 +109,52 @@ if (isset($_POST['submit'])) {
 
                             echo "<div class='acao-corretiva'>";
                             echo "<label class='acao-corretiva' for='acao-corretiva-" . $row['Pergunta'] . "'>Ação Corretiva</label>";
-                            echo "<input type='text' name='acao-corretiva[" . $row['Pergunta'] . "]' id='acao-corretiva-" . $row['Pergunta'] . "'>";
+                            echo "<input type='text' name='acao-corretiva[" . $row['Pergunta'] . "]' id='acao-corretiva-" . $row['Pergunta'] . "' value='" . $row['AçãoCorretiva'] . "'>";
                             echo "</div>";
 
                             echo "<div class='data-inicio'>";
                             echo "<label for='data-inicio-" . $row['Pergunta'] . "'>Data Início</label>";
-                            echo "<input type='date' name='data-inicio[" . $row['Pergunta'] . "]' id='data-inicio-" . $row['Pergunta'] . "'>";
+                            echo "<input type='date' name='data-inicio[" . $row['Pergunta'] . "]' id='data-inicio-" . $row['Pergunta'] . "' value='" . $row['Data_inicio'] . "'>";
                             echo "</div>";
 
                             echo "<div class='data-fim'>";
                             echo "<label for 'data-fim-" . $row['Pergunta'] . "'>Data Fim</label>";
-                            echo "<input type='date' name='data-fim[" . $row['Pergunta'] . "]' id='data-fim-" . $row['Pergunta'] . "'>";
+                            echo "<input type='date' name='data-fim[" . $row['Pergunta'] . "]' id='data-fim-" . $row['Pergunta'] . "' value='" . $row['Data_fim'] . "'>";
                             echo "</div>";
 
                             echo "<div class='resolvido'>";
                             echo "<label for='resolvido-" . $row['Pergunta'] . "'>Resolvido</label>";
                             echo "<select name='resolvido[" . $row['Pergunta'] . "]' id='resolvido-" . $row['Pergunta'] . "'>";
-                            echo "<option value='Não' selected>Não</option>";
-                            echo "<option value='Sim'>Sim</option>";
+                            echo "<option value='Não' " . ($row['Resolvido_nc'] == 'Não' ? 'selected' : '') . ">Não</option>";
+                            echo "<option value='Sim' " . ($row['Resolvido_nc'] == 'Sim' ? 'selected' : '') . ">Sim</option>";
                             echo "</select>";
                             echo "</div>";
 
                             echo "<div class='escalonamento'>";
                             echo "<label class='escalonamento' for='escalonamento-" . $row['Pergunta'] . "'>Escalonamento</label>";
-                            echo "<input type='text' name='escalonamento[" . $row['Pergunta'] . "]' id='escalonamento-" . $row['Pergunta'] . "'>";
+                            echo "<select name='escalonamento[" . $row['Pergunta'] . "]' id='escalonamento-" . $row['Pergunta'] . "'>";
+                            echo "<option value='Não Aplicado' " . ($row['Escalonamento'] == 'Não Aplicado' ? 'selected' : '') . ">Não Aplicado</option>";
+                            echo "<option value='1' " . ($row['Escalonamento'] == '1' ? 'selected' : '') . ">1</option>";
+                            echo "<option value='2' " . ($row['Escalonamento'] == '2' ? 'selected' : '') . ">2</option>";
+                            echo "<option value='3' " . ($row['Escalonamento'] == '3' ? 'selected' : '') . ">3</option>";
+                            echo "</select>";
                             echo "</div>";
 
                             $nc++;
                         }
                     }
                     ?>
+
+                    <?php
+                    if ($taxaAderencia != 100) {
+                        echo '<input type="submit" name="submit" value="Enviar Respostas">';
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
-        <input type="submit" name="submit" value="Enviar Respostas" style="background-color: rgb(10, 151, 97); color: #fff;">
     </form>
     <script>
-        <?php
-        if (isset($successMessage)) {
-            echo "alert('$successMessage');";
-        }
-
-        if (isset($errorMessage)) {
-            echo "alert('$errorMessage');";
-        }
-        ?>
     </script>
 </body>
 </html>
